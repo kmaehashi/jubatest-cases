@@ -12,29 +12,29 @@ class AnomalyAPITestBase(APITestBase):
 
     def test_clear_row(self):
         d = self.types.datum([], [])
-        (row_id, score) = self.cli.add(self.name, d)
-        self.assertEqual(self.cli.clear_row(self.name, row_id), True)
+        result = self.cli.add(d)
+        self.assertEqual(self.cli.clear_row(result.id), True)
         # TODO: return true when non existent id ..
-        # self.assertEqual(self.cli.clear_row(self.name, "non-existent-id"), False)
+        # self.assertEqual(self.cli.clear_row("non-existent-id"), False)
 
     def test_add(self):
         d = self.types.datum([], [])
-        (row_id, score) = self.cli.add(self.name, d)
+        result = self.cli.add(d)
 
     def test_update(self):
         d = self.types.datum([], [])
-        (row_id, score) = self.cli.add(self.name, d)
+        result = self.cli.add(d)
         d = self.types.datum([], [('val', 3.1)])
-        score = self.cli.update(self.name, row_id, d)
+        score = self.cli.update(result.id, d)
 
     def test_calc_score(self):
         d = self.types.datum([], [('val', 1.1)])
-        (row_id, score) = self.cli.add(self.name, d)
+        result = self.cli.add(d)
         d = self.types.datum([], [('val', 3.1)])
-        score = self.cli.calc_score(self.name, d)
+        score = self.cli.calc_score(d)
 
     def test_get_all_rows(self):
-        self.cli.get_all_rows(self.name)
+        self.cli.get_all_rows()
 
     def test_usecase_basic(self): # TODO
         self.test_add()

@@ -22,7 +22,7 @@ class MixTriggerTestBase(object):
     def send_datum(self, cli, count):
         d = self.server0.types.datum([('foo', 'bar')], [])
         for i in range(count):
-            cli.train(self.cluster.name, [('label', d)])
+            cli.train([('label', d)])
 
     def mix_logs(self, target):
         return target.log().message('starting mix:').get()
@@ -32,7 +32,7 @@ class MixTriggerTestBase(object):
 class MixTriggerDisabledTest(JubaTestCase, MixTriggerTestBase):
     @classmethod
     def get_intervals(cls):
-        return (-1, -1)
+        return (-1, -1) # TODO should be (0, 0) for 0.5.1+
 
     def test(self):
         """
@@ -49,7 +49,7 @@ def createMixTriggerTimerOnlyTest(interval_sec):
     class MixTriggerTimerOnlyTestBase(MixTriggerTestBase):
         @classmethod
         def get_intervals(cls):
-            return (interval_sec, -1)
+            return (interval_sec, -1) # TODO should be 0 for 0.5.1+
 
         def test(self):
             """
@@ -70,7 +70,7 @@ def createMixTriggerCounterOnlyTest(interval_count):
     class MixTriggerCounterOnlyTestBase(MixTriggerTestBase):
         @classmethod
         def get_intervals(cls):
-            return (-1, interval_count)
+            return (-1, interval_count) # TODO should be 0 for 0.5.1+
 
         def test(self):
             """
@@ -112,6 +112,6 @@ class MixTriggerTimerCounterTest(JubaTestCase, MixTriggerTestBase):
             sleep(1) # allow MIX to begin
             second_mix = datetime.now()
         first_mix_logs = self.server0.log().time_range(begin, first_mix).message('starting mix:').get()
-        self.assertEqual(1, len(first_mix_logs), self.server0.backend.stdout)
+        self.assertEqual(1, len(first_mix_logs))
         second_mix_logs = self.server0.log().consume(first_mix_logs[0]).message('starting mix:').get()
-        self.assertEqual(1, len(second_mix_logs), self.server0.backend.stdout)
+        self.assertEqual(1, len(second_mix_logs))

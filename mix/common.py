@@ -17,8 +17,8 @@ class MixOperationTestBase(object):
 
         # server1 always become MIX master
         cls.server1 = env.server(cls.node0, cls.cluster, [('--interval_sec', 3)])
-        cls.server2 = env.server(cls.node0, cls.cluster, [('--interval_sec', -1)])
-        cls.server3 = env.server(cls.node0, cls.cluster, [('--interval_sec', -1)])
+        cls.server2 = env.server(cls.node0, cls.cluster, [('--interval_sec', 0)])
+        cls.server3 = env.server(cls.node0, cls.cluster, [('--interval_sec', 0)])
 
     @classmethod
     def engine(cls):

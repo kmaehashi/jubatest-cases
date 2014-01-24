@@ -16,8 +16,8 @@ class APITestBase():
         return default_config(cls.service())
 
     @classmethod
-    def get_client(cls):
-        return cls.default_route.get_client()
+    def get_client(cls, name):
+        return cls.default_route.get_client(name)
 
     @property
     def types(cls):
@@ -28,18 +28,18 @@ class APITestBase():
     #########################################
 
     def test_save_load(self):
-        self.assertTrue(self.cli.save(self.name, 'test'))
-        self.assertTrue(self.cli.load(self.name, 'test'))
+        self.assertTrue(self.cli.save('test'))
+        self.assertTrue(self.cli.load('test'))
 
     def test_clear(self):
-        self.assertTrue(self.cli.clear(self.name))
+        self.assertTrue(self.cli.clear())
 
     def test_get_config(self):
-        config = self.cli.get_config(self.name)
+        config = self.cli.get_config()
         self.assertEqual(json.dumps(json.loads(config), sort_keys=True), json.dumps(self.config(), sort_keys=True))
 
     def test_get_status(self):
-        status = self.cli.get_status(self.name)
+        status = self.cli.get_status()
         self.assertTrue(0 < len(status))
 
     def test_get_client(self):
@@ -55,7 +55,7 @@ class StandaloneTestBase():
 
     def setUp(self):
         self.server1.start()
-        self.cli = self.get_client()
+        self.cli = self.get_client(self.name)
 
     def tearDown(self):
         self.server1.stop()
@@ -73,7 +73,7 @@ class DistributedTestBase():
     def setUp(self):
         self.cluster.start()
         self.keeper1.start()
-        self.cli = self.get_client()
+        self.cli = self.get_client(self.name)
 
     def tearDown(self):
         self.cluster.stop()

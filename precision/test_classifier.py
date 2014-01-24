@@ -11,13 +11,13 @@ class ClassifierPrecisionTestBase(object):
         # train
         for (label, message) in self.entries_in('train.dat'):
             d = self.types.datum([["message", message]], [])
-            self.cli.train(self.name, [(label, d)])
+            self.cli.train([(label, d)])
 
         # classify
         (match, unmatch) = (0, 0)
         for (label, message) in self.entries_in('test.dat'):
             d = self.types.datum([["message", message]], [])
-            results = self.cli.classify(self.name, [d])[0]
+            results = self.cli.classify([d])[0]
             results.sort(key=lambda e: e.score, reverse=True)
             if 0 < len(results) and results[0].label == label:
                 match += 1
@@ -75,7 +75,7 @@ class ClassifierPrecisionDistributedTest(JubaTestCase, ClassifierPrecisionTestBa
     def setUp(self):
         self.keeper1.start()
         self.cluster.start()
-        self.cli = self.keeper1.get_client()
+        self.cli = self.keeper1.get_client(self.name)
         self.types = self.keeper1.types
 
     def tearDown(self):

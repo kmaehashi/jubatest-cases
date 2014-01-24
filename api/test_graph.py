@@ -13,30 +13,30 @@ class GraphAPITestBase(APITestBase):
     def test_node_info(self):
         edge_query = [["a", "b"], ["c", "d"], ["e", "f"]]
         node_query = [["0", "1"], ["2", "3"]]
-        p = self.types.preset_query(edge_query, node_query)
+        p = self.types.PresetQuery(edge_query, node_query)
         in_edges = [0, 0]
         out_edges = [0, 0]
-        self.types.node(p, in_edges, out_edges)
+        self.types.Node(p, in_edges, out_edges)
 
     def test_create_node(self):
-        nid = self.cli.create_node(self.name)
+        nid = self.cli.create_node()
         self.assertEqual(str(int(nid)), nid)
 
     def test_remove_node(self):
-        nid = self.cli.create_node(self.name)
-        self.assertEqual(self.cli.remove_node(self.name, nid), True)
+        nid = self.cli.create_node()
+        self.assertEqual(self.cli.remove_node(nid), True)
 
     def test_update_node(self):
-        nid = self.cli.create_node(self.name)
+        nid = self.cli.create_node()
         prop = {"key1":"val1", "key2":"val2"}
-        self.assertEqual(self.cli.update_node(self.name, nid, prop), True)
+        self.assertEqual(self.cli.update_node(nid, prop), True)
 
     def test_create_edge(self):
-        src = self.cli.create_node(self.name)
-        tgt = self.cli.create_node(self.name)
+        src = self.cli.create_node()
+        tgt = self.cli.create_node()
         prop = {"key1":"val1", "key2":"val2"}
-        ei = self.types.edge(prop, src, tgt)
-        eid = self.cli.create_edge(self.name, tgt, ei)
+        ei = self.types.Edge(prop, src, tgt)
+        eid = self.cli.create_edge(tgt, ei)
 
     # TODO lacks some APIs
 

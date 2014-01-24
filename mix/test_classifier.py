@@ -18,12 +18,12 @@ class MixOperationClassifierTestBase(MixOperationTestBase):
 
     def do_train(self, server, key, weight):
         d = self.server1.types.datum([], [(str(key), float(weight))])
-        server.get_client().train(self.cluster.name, [('label1', d)])
+        server.get_client().train([('label1', d)])
 
     def do_classify_assertion(self, key, score):
         for cli in map(lambda s: s.get_client(), self.servers()):
             d = self.server1.types.datum([], [(key, 1.0)])
-            result = cli.classify(self.cluster.name, [d])
+            result = cli.classify([d])
             self.assertEquals(1, len(result))
             self.assertEquals(1, len(result[0]))
             self.assertEquals('label1', result[0][0].label)
