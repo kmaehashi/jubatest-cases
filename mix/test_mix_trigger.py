@@ -32,7 +32,7 @@ class MixTriggerTestBase(object):
 class MixTriggerDisabledTest(JubaTestCase, MixTriggerTestBase):
     @classmethod
     def get_intervals(cls):
-        return (-1, -1) # TODO should be (0, 0) for 0.5.1+
+        return (0, 0)
 
     def test(self):
         """
@@ -49,7 +49,7 @@ def createMixTriggerTimerOnlyTest(interval_sec):
     class MixTriggerTimerOnlyTestBase(MixTriggerTestBase):
         @classmethod
         def get_intervals(cls):
-            return (interval_sec, -1) # TODO should be 0 for 0.5.1+
+            return (interval_sec, 0)
 
         def test(self):
             """
@@ -70,7 +70,7 @@ def createMixTriggerCounterOnlyTest(interval_count):
     class MixTriggerCounterOnlyTestBase(MixTriggerTestBase):
         @classmethod
         def get_intervals(cls):
-            return (-1, interval_count) # TODO should be 0 for 0.5.1+
+            return (0, interval_count)
 
         def test(self):
             """
