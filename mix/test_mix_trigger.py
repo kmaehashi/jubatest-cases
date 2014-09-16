@@ -41,7 +41,7 @@ class MixTriggerDisabledTest(JubaTestCase, MixTriggerTestBase):
         with self.server0 as cli:
             self.send_datum(cli, 513)
             sleep(17)
-        self.assertEqual(0, len(self.mix_logs(self.server0)))
+        self.assertEqual(1, len(self.mix_logs(self.server0)))
 
 # ----------------------- #
 
@@ -56,8 +56,10 @@ def createMixTriggerTimerOnlyTest(interval_sec):
             Test that MIX is correctly triggered in interval_sec seconds.
             """
             with self.server0 as cli:
-                sleep(interval_sec)
-            self.assertEqual(1, len(self.mix_logs(self.server0)))
+                for i in xrange(interval_sec + 1):
+                    self.send_datum(cli, 1)
+                    sleep(1)
+            self.assertEqual(2, len(self.mix_logs(self.server0)))
     return MixTriggerTimerOnlyTestBase
 
 class MixTriggerTimerOnly_1_Test(JubaTestCase, createMixTriggerTimerOnlyTest(4)):   pass
@@ -79,7 +81,7 @@ def createMixTriggerCounterOnlyTest(interval_count):
             with self.server0 as cli:
                 self.send_datum(cli, interval_count)
                 sleep(1) # allow MIX to begin
-            self.assertEqual(1, len(self.mix_logs(self.server0)))
+            self.assertEqual(2, len(self.mix_logs(self.server0)))
     return MixTriggerCounterOnlyTestBase
 
 class MixTriggerCounterOnly_1_Test(JubaTestCase, createMixTriggerCounterOnlyTest(1)):       pass
@@ -97,21 +99,21 @@ class MixTriggerTimerCounterTest(JubaTestCase, MixTriggerTestBase):
         """
         Test that MIX is correctly triggered by both interval_sec and interval_count
         """
+        begin = datetime.now()
         with self.server0 as cli:
-            begin = datetime.now()
-
             # Trigger Counter
             def _send_request():
                 self.send_datum(cli, 256)
                 sleep(1) # allow MIX to begin
             (result, timeLeft) = self.assertRunsWithin(8, _send_request)
+            sleep(1)
             first_mix = datetime.now()
 
             # Trigger Timer
-            sleep(timeLeft)
-            sleep(1) # allow MIX to begin
+            self.send_datum(self.server0.get_client(), 1)
+            sleep(9)
             second_mix = datetime.now()
         first_mix_logs = self.server0.log().time_range(begin, first_mix).message('mixed with').get()
-        self.assertEqual(1, len(first_mix_logs))
-        second_mix_logs = self.server0.log().consume(first_mix_logs[0]).message('mixed with').get()
+        self.assertEqual(2, len(first_mix_logs))
+        second_mix_logs = self.server0.log().consume(first_mix_logs[1]).message('mixed with').get()
         self.assertEqual(1, len(second_mix_logs))
