@@ -37,8 +37,8 @@ class RecommenderAPITestBase(APITestBase):
         d = self.types.datum(string_values, num_values)
         self.cli.update_row("decode_row", d)
         decoded_row = self.cli.decode_row("decode_row")
-        self.assertEqual(d.string_values, decoded_row.string_values)
-        self.assertEqual(d.num_values, decoded_row.num_values)
+        self.assertEqual(dict(d.string_values), dict(decoded_row.string_values))
+        self.assertEqual(dict(d.num_values),    dict(decoded_row.num_values))
 
     def test_get_row(self):
         self.cli.clear()
