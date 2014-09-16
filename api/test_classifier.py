@@ -38,7 +38,7 @@ class ClassifierAPITestBase(APITestBase):
         def _analysis(label, d):
             result = client.classify([d])
             self.assertEqual(1, len(result))
-            self.assertEqual(1, len(result[0]))
+            self.assertEqual(2, len(result[0]))
             self.assertEqual(label, result[0][0].label)
             self.assertTrue(0 < result[0][0].score)
         _analysis("label1", d1)
