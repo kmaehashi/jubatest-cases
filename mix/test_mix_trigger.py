@@ -25,7 +25,7 @@ class MixTriggerTestBase(object):
             cli.train([('label', d)])
 
     def mix_logs(self, target):
-        return target.log().message('starting mix:').get()
+        return target.log().message('mixed with ').get()
 
 # ----------------------- #
 
@@ -111,7 +111,7 @@ class MixTriggerTimerCounterTest(JubaTestCase, MixTriggerTestBase):
             sleep(timeLeft)
             sleep(1) # allow MIX to begin
             second_mix = datetime.now()
-        first_mix_logs = self.server0.log().time_range(begin, first_mix).message('starting mix:').get()
+        first_mix_logs = self.server0.log().time_range(begin, first_mix).message('mixed with').get()
         self.assertEqual(1, len(first_mix_logs))
-        second_mix_logs = self.server0.log().consume(first_mix_logs[0]).message('starting mix:').get()
+        second_mix_logs = self.server0.log().consume(first_mix_logs[0]).message('mixed with').get()
         self.assertEqual(1, len(second_mix_logs))
