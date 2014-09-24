@@ -80,7 +80,7 @@ def createMixTriggerCounterOnlyTest(interval_count):
             """
             with self.server0 as cli:
                 self.send_datum(cli, interval_count)
-                sleep(1) # allow MIX to begin
+                sleep(5) # allow MIX to complete
             self.assertEqual(2, len(self.mix_logs(self.server0)))
     return MixTriggerCounterOnlyTestBase
 
