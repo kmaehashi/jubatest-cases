@@ -35,13 +35,14 @@ class ClassifierAPITestBase(APITestBase):
         self.assertEqual(2, result)
 
         # analysis
-        def _analysis(label, d):
+        def _analysis(label, num_labels, d):
             result = client.classify([d])
             self.assertEqual(1, len(result))
-            self.assertEqual(2, len(result[0]))
-            self.assertEqual(label, result[0][0].label)
-            self.assertTrue(0 < result[0][0].score)
-        _analysis("label1", d1)
+            self.assertEqual(num_labels, len(result[0]))
+            best_estimates = max(result[0], key = lambda x: x.score)
+            self.assertEqual(label, best_estimates.label)
+            self.assertTrue(0 < best_estimates.score)
+        _analysis("label1", 2, d1)
 
         # save
         result = client.save('model')
@@ -61,14 +62,14 @@ class ClassifierAPITestBase(APITestBase):
         self.assertTrue(result)
 
         # analysis
-        _analysis("label2", d2)
+        _analysis("label2", 2, d2)
 
         # update
         result = client.train([("label3", d3)])
         self.assertEqual(1, result)
 
         # analysis
-        _analysis("label3", d3)
+        _analysis("label3", 3, d3)
 
         # commons
         self.test_get_config()
