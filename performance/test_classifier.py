@@ -73,32 +73,6 @@ class ClassifierAPIPerformanceDistributedTest(JubaTestCase, ClassifierAPIPerform
         cls.server1 = env.server(cls.node0, cls.cluster)
         cls.server2 = env.server(cls.node0, cls.cluster)
         cls.server3 = env.server(cls.node0, cls.cluster)
-
-class ClassifierAPIPerformanceStandaloneTest(JubaTestCase, ClassifierAPIPerformanceTestBase):
-    @classmethod
-    def setUpCluster(cls, env):
-        cls.env = env
-        cls.server1 = env.server_standalone(env.get_node(0), CLASSIFIER, default_config(CLASSIFIER))
-        cls.target = cls.server1
-        cls.name = ''
-        cls.client_node = env.get_node(0)
-        cls.init_benchmark_tool()
-
-    def setUp(self):
-        self.server1.start()
-
-    def tearDown(self):
-        self.server1.stop()
-
-class ClassifierAPIPerformanceDistributedTest(JubaTestCase, ClassifierAPIPerformanceTestBase):
-    @classmethod
-    def setUpCluster(cls, env):
-        cls.env = env
-        cls.node0 = env.get_node(0)
-        cls.cluster = env.cluster(CLASSIFIER, default_config(CLASSIFIER))
-        cls.server1 = env.server(cls.node0, cls.cluster)
-        cls.server2 = env.server(cls.node0, cls.cluster)
-        cls.server3 = env.server(cls.node0, cls.cluster)
         cls.server4 = env.server(cls.node0, cls.cluster)
         cls.keeper1 = env.keeper(cls.node0, CLASSIFIER)
         cls.target = cls.keeper1
